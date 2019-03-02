@@ -13,14 +13,7 @@ class Notici_Register_Cpt {
 		add_action( 'init', array( $this, 'notici_register_cpt' ) );
 
 		// Add event categories
-		add_action( 'init', array( $this, 'noticicategory_taxonomy' ), 0 );
-
-		// Change columns in admin
-		add_filter( 'manage_notici_posts_columns', array( $this, 'notici_edit_columns' ) );
-		add_action( 'manage_posts_custom_column', array( $this, 'notici_custom_columns' ) );
-
-		// Add meta box
-		add_action( 'admin_init', array( $this, 'notici_add_metabox' ) );
+		add_action( 'init', array( $this, 'notici_category_taxonomy' ), 0 );
 
 		// Styles and scripts
 		$this->notici_styles_and_scripts();
@@ -56,12 +49,12 @@ class Notici_Register_Cpt {
 			'show_ui'           => true,
 			'_builtin'          => false,
 			'capability_type'   => 'post',
-			'menu_icon'         => 'dashicons-calendar-alt',
+			'menu_icon'         => 'dashicons-exerpt-view',
 			'hierarchical'      => false,
 			'rewrite'           => array( 'slug' => get_option( 'notici_slug' ) ),
 			'supports'          => array( 'title', 'thumbnail', 'excerpt', 'editor' ),
 			'show_in_nav_menus' => true,
-			'taxonomies'        => array( 'noticicategory', 'post_tag' ),
+			'taxonomies'        => array( 'notici_category', 'post_tag' ),
 		);
 
 		register_post_type( 'notici', $args );
@@ -69,7 +62,7 @@ class Notici_Register_Cpt {
 
 	}
 
-	function noticicategory_taxonomy() {
+	function notici_category_taxonomy() {
 
 		$labels = array(
 			'name'                       => _x( 'Categories', 'taxonomy general name' ),
@@ -97,7 +90,7 @@ class Notici_Register_Cpt {
 				'hierarchical' => true,
 				'show_ui'      => true,
 				'query_var'    => true,
-				'rewrite'      => array( 'slug' => 'event-category' ),
+				'rewrite'      => array( 'slug' => 'notice-category' ),
 			)
 		);
 	}
@@ -112,59 +105,6 @@ class Notici_Register_Cpt {
 			'notici_col_cat'  => 'Category',
 		);
 		return $columns;
-	}
-
-	function notici_custom_columns( $column ) {
-		global $post;
-		$custom      = get_post_custom();
-		$date_format = get_option( 'date_format' );
-		$time_format = get_option( 'time_format' );
-
-		switch ( $column ) {
-			case 'notici_col_desc':
-				the_excerpt();
-				break;
-			case 'notici_col_date':
-				$meta_startdate = $custom['notici_startdate'][0];
-				$meta_enddate   = $custom['notici_enddate'][0];
-				$meta_starttime = $custom['notici_starttime'][0];
-				$meta_endtime   = $custom['notici_endtime'][0];
-
-				$formatted_time = date_i18n( $date_format, strtotime( $meta_startdate ) );
-				if ( null != $meta_starttime ) {
-					$formatted_time .= ': ' . date_i18n( $time_format, strtotime( $meta_starttime ) );
-				}
-
-				if ( null != $meta_enddate ) {
-					if ( $meta_startdate != $meta_enddate ) {
-						$formatted_time .= '<br> &mdash; ' . date_i18n( $date_format, strtotime( $meta_enddate ) );
-					} else {
-						$formatted_time .= '-';
-					}
-
-					if ( null != $meta_endtime ) {
-						$formatted_time .= date_i18n( $time_format, strtotime( $meta_endtime ) );
-					}
-				}
-
-				echo $formatted_time;
-				break;
-			case 'notici_col_cat':
-				// - show taxonomy terms -
-				$eventcats      = get_the_terms( $post->ID, 'noticicategory' );
-				$eventcats_html = array();
-				if ( $eventcats ) {
-					foreach ( $eventcats as $eventcat ) {
-						array_push( $eventcats_html, $eventcat->name );
-					}
-					echo implode( $eventcats_html, ', ' );
-				} else {
-					_e( 'None', 'notici' );
-
-				}
-				break;
-
-		}
 	}
 
 	function notici_add_metabox() {
