@@ -122,8 +122,8 @@ class Notici_Register_Cpt {
 		$meta_endtime   = $custom['notici_endtime'][0];
 
 		// WP nonce
-		echo '<input type="hidden" name="notici-notices-nonce" id="notici-notices-nonce" value="' .
-		wp_create_nonce( 'notici-notices-nonce' ) . '" />';
+		echo '<input type="hidden" name="notici-nonce" id="notici-nonce" value="' .
+		wp_create_nonce( 'notici-nonce' ) . '" />';
 		?>
 			<div class="tf-meta">
 			<ul>
@@ -170,7 +170,7 @@ class Notici_Register_Cpt {
 		global $post;
 
 		// Require nonce
-		if ( ! wp_verify_nonce( $_POST['notici-notices-nonce'], 'notici-notices-nonce' ) ) {
+		if ( ! wp_verify_nonce( $_POST['notici-nonce'], 'notici-nonce' ) ) {
 			return $post->ID;
 		}
 
