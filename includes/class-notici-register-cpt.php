@@ -137,15 +137,15 @@ class Notici_Register_Cpt {
 	}
 
 	function notici_styles_and_scripts() {
-		add_action( 'admin_print_styles-post.php', array( $this, 'notices_styles' ), 1000 );
-		add_action( 'admin_print_styles-post-new.php', array( $this, 'notices_styles' ), 1000 );
+		add_action( 'admin_print_styles-post.php', array( $this, 'notici_styles' ), 1000 );
+		add_action( 'admin_print_styles-post-new.php', array( $this, 'notici_styles' ), 1000 );
 
-		add_action( 'admin_print_scripts-post.php', array( $this, 'notices_scripts' ), 1000 );
-		add_action( 'admin_print_scripts-post-new.php', array( $this, 'notices_scripts' ), 1000 );
+		add_action( 'admin_print_scripts-post.php', array( $this, 'notici_scripts' ), 1000 );
+		add_action( 'admin_print_scripts-post-new.php', array( $this, 'notici_scripts' ), 1000 );
 	}
 
 
-	function notices_styles() {
+	function notici_styles() {
 		global $post_type;
 		if ( 'notici' != $post_type ) {
 			return;
@@ -154,7 +154,7 @@ class Notici_Register_Cpt {
 		wp_enqueue_style( $this->plugin_name . '-notici-admin', plugin_dir_url( __DIR__ ) . 'admin/css/notici-admin.css', array(), $this->version, 'all' );
 	}
 
-	function notices_scripts() {
+	function notici_scripts() {
 		global $post_type;
 		if ( 'notici' != $post_type ) {
 			return;
