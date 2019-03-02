@@ -95,17 +95,6 @@ class Notici_Register_Cpt {
 		);
 	}
 
-	function notici_edit_columns( $columns ) {
-
-		$columns = array(
-			'cb'              => '<input type="checkbox" />',
-			'title'           => 'Notice',
-			'notici_col_desc' => 'Description',
-			'notici_col_date' => 'Dates',
-			'notici_col_cat'  => 'Category',
-		);
-		return $columns;
-	}
 
 	function notici_add_metabox() {
 		add_meta_box( 'notici_render_admin_metabox', 'Notice time', array( $this, 'notici_render_admin_metabox' ), 'notici' );
