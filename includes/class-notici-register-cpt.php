@@ -65,7 +65,7 @@ class Notici_Register_Cpt {
 		$labels = array(
 			'name'                       => _x( 'Notice categories', 'Taxonomy General Name', 'notici' ),
 			'singular_name'              => _x( 'Notice category', 'Taxonomy Singular Name', 'notici' ),
-			'menu_name'                  => __( 'Taxonomy', 'notici' ),
+			'menu_name'                  => __( 'Notice category', 'notici' ),
 			'all_items'                  => __( 'All Items', 'notici' ),
 			'parent_item'                => __( 'Parent Item', 'notici' ),
 			'parent_item_colon'          => __( 'Parent Item:', 'notici' ),
@@ -86,12 +86,12 @@ class Notici_Register_Cpt {
 		);
 		$args   = array(
 			'labels'            => $labels,
-			'hierarchical'      => false,
+			'hierarchical'      => true,
 			'public'            => true,
 			'show_ui'           => true,
+			'show_in_rest'      => true,
 			'show_admin_column' => true,
 			'show_in_nav_menus' => true,
-			'show_tagcloud'     => true,
 			'rewrite'           => array( 'slug' => 'notice-category' ),
 		);
 		register_taxonomy( 'noticicategory', array( 'notici' ), $args );
