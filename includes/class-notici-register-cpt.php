@@ -12,11 +12,8 @@ class Notici_Register_Cpt {
 		// Register the custom post type
 		add_action( 'init', array( $this, 'notici_register_cpt' ) );
 
-		// Add event categories
-		add_action( 'init', array( $this, 'notici_category_taxonomy' ), 0 );
-
-		// Styles and scripts
-		$this->notici_styles_and_scripts();
+		// Add notici categories
+		add_action( 'init', array( $this, 'notici_register_category_taxonomy' ), 0 );
 
 		// Save post
 		add_action( 'save_post', array( $this, 'save_notici' ) );
@@ -54,7 +51,7 @@ class Notici_Register_Cpt {
 			'rewrite'           => array( 'slug' => get_option( 'notici_slug' ) ),
 			'supports'          => array( 'title', 'thumbnail', 'excerpt', 'editor' ),
 			'show_in_nav_menus' => true,
-			'taxonomies'        => array( 'notici_category', 'post_tag' ),
+			'taxonomies'        => array( 'noticicategory', 'post_tag' ),
 		);
 
 		register_post_type( 'notici', $args );
@@ -62,37 +59,43 @@ class Notici_Register_Cpt {
 
 	}
 
-	function notici_category_taxonomy() {
+	// Register Custom Taxonomy
+	function notici_register_category_taxonomy() {
 
 		$labels = array(
-			'name'                       => _x( 'Categories', 'taxonomy general name' ),
-			'singular_name'              => _x( 'Category', 'taxonomy singular name' ),
-			'search_items'               => __( 'Search Categories' ),
-			'popular_items'              => __( 'Popular Categories' ),
-			'all_items'                  => __( 'All Categories' ),
-			'parent_item'                => null,
-			'parent_item_colon'          => null,
-			'edit_item'                  => __( 'Edit Category' ),
-			'update_item'                => __( 'Update Category' ),
-			'add_new_item'               => __( 'Add New Category' ),
-			'new_item_name'              => __( 'New Category Name' ),
-			'separate_items_with_commas' => __( 'Separate categories with commas' ),
-			'add_or_remove_items'        => __( 'Add or remove categories' ),
-			'choose_from_most_used'      => __( 'Choose from the most used categories' ),
+			'name'                       => _x( 'Notice categories', 'Taxonomy General Name', 'notici' ),
+			'singular_name'              => _x( 'Notice category', 'Taxonomy Singular Name', 'notici' ),
+			'menu_name'                  => __( 'Taxonomy', 'notici' ),
+			'all_items'                  => __( 'All Items', 'notici' ),
+			'parent_item'                => __( 'Parent Item', 'notici' ),
+			'parent_item_colon'          => __( 'Parent Item:', 'notici' ),
+			'new_item_name'              => __( 'New Item Name', 'notici' ),
+			'add_new_item'               => __( 'Add New Item', 'notici' ),
+			'edit_item'                  => __( 'Edit Item', 'notici' ),
+			'update_item'                => __( 'Update Item', 'notici' ),
+			'view_item'                  => __( 'View Item', 'notici' ),
+			'separate_items_with_commas' => __( 'Separate items with commas', 'notici' ),
+			'add_or_remove_items'        => __( 'Add or remove items', 'notici' ),
+			'choose_from_most_used'      => __( 'Choose from the most used', 'notici' ),
+			'popular_items'              => __( 'Popular Items', 'notici' ),
+			'search_items'               => __( 'Search Items', 'notici' ),
+			'not_found'                  => __( 'Not Found', 'notici' ),
+			'no_terms'                   => __( 'No items', 'notici' ),
+			'items_list'                 => __( 'Items list', 'notici' ),
+			'items_list_navigation'      => __( 'Items list navigation', 'notici' ),
 		);
+		$args   = array(
+			'labels'            => $labels,
+			'hierarchical'      => false,
+			'public'            => true,
+			'show_ui'           => true,
+			'show_admin_column' => true,
+			'show_in_nav_menus' => true,
+			'show_tagcloud'     => true,
+			'rewrite'           => array( 'slug' => 'notice-category' ),
+		);
+		register_taxonomy( 'noticicategory', array( 'notici' ), $args );
 
-		register_taxonomy(
-			'noticicategory',
-			'notici',
-			array(
-				'label'        => __( 'Notice Category' ),
-				'labels'       => $labels,
-				'hierarchical' => true,
-				'show_ui'      => true,
-				'query_var'    => true,
-				'rewrite'      => array( 'slug' => 'notice-category' ),
-			)
-		);
 	}
 
 	function save_notici() {
