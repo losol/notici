@@ -16,7 +16,7 @@
  * Plugin Name:       Notici
  * Plugin URI:        https://losol.io/notici
  * Description:       Notice listing made fun.
- * Version:           1.0.2
+ * Version:           1.0.3
  * Author:            Ole Kristian Losvik
  * Author URI:        https://losol.no
  * License:           GPL-2.0+
