@@ -35,7 +35,7 @@ class Notici_Public {
 	function load_event_archive_template( $template ) {
 		global $post;
 
-		if ( is_archive() && $template !== locate_template( array( 'archive-notici.php' ) ) ) {
+		if ( $post->post_type == 'notici' && is_archive() && $template !== locate_template( array( 'archive-notici.php' ) ) ) {
 			return plugin_dir_path( __FILE__ ) . 'templates/archive-notici.php';
 		}
 
