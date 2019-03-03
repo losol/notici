@@ -101,7 +101,7 @@ class Notici_Options {
 
 	public function set_default_settings() {
 		$notici_slug = get_option( 'notici_slug' );
-		if ( false === $notici_slug ) { // Nothing yet saved
+		if ( false === $notici_slug ) {
 			update_option( 'notici_slug', 'notices' );
 		}
 	}

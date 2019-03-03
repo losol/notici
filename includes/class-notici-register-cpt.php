@@ -95,65 +95,6 @@ class Notici_Register_Cpt {
 		);
 	}
 
-
-	function notici_add_metabox() {
-		add_meta_box( 'notici_render_admin_metabox', 'Notice time', array( $this, 'notici_render_admin_metabox' ), 'notici' );
-	}
-
-	function notici_render_admin_metabox() {
-
-		// Get post meta.
-		global $post;
-		$custom         = get_post_custom( $post->ID );
-		$meta_startdate = $custom['notici_startdate'][0];
-		$meta_enddate   = $custom['notici_enddate'][0];
-		$meta_starttime = $custom['notici_starttime'][0];
-		$meta_endtime   = $custom['notici_endtime'][0];
-
-		// WP nonce
-		echo '<input type="hidden" name="notici-nonce" id="notici-nonce" value="' .
-		wp_create_nonce( 'notici-nonce' ) . '" />';
-		?>
-			<div class="tf-meta">
-			<ul>
-				<li><label>Start Date</label><input name="notici_startdate" class="tfdate" value="<?php echo esc_attr( $meta_startdate ); ?>" /><em> YYYY-MM-DD, like 2019-12-31</em></li>
-				<li><label>Start Time</label><input name="notici_starttime" value="<?php echo esc_attr( $meta_starttime ); ?>" /><em> Use 24h format (7pm = 19:00)</em></li>
-				<li><label>End Date</label><input name="notici_enddate" class="tfdate" value="<?php echo esc_attr( $meta_enddate ); ?>" /><em> YYYY-MM-DD, like 2019-12-31</em></li>
-				<li><label>End Time</label><input name="notici_endtime" value="<?php echo esc_attr( $meta_endtime ); ?>" /><em> Use 24h format (7pm = 19:00)</em></li>
-			</ul>
-			</div>
-		<?php
-	}
-
-	function notici_styles_and_scripts() {
-		add_action( 'admin_print_styles-post.php', array( $this, 'notici_styles' ), 1000 );
-		add_action( 'admin_print_styles-post-new.php', array( $this, 'notici_styles' ), 1000 );
-
-		add_action( 'admin_print_scripts-post.php', array( $this, 'notici_scripts' ), 1000 );
-		add_action( 'admin_print_scripts-post-new.php', array( $this, 'notici_scripts' ), 1000 );
-	}
-
-
-	function notici_styles() {
-		global $post_type;
-		if ( 'notici' != $post_type ) {
-			return;
-		}
-		wp_enqueue_style( 'jquery-ui-datepicker-style', '//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css' );
-		wp_enqueue_style( $this->plugin_name . '-notici-admin', plugin_dir_url( __DIR__ ) . 'admin/css/notici-admin.css', array(), $this->version, 'all' );
-	}
-
-	function notici_scripts() {
-		global $post_type;
-		if ( 'notici' != $post_type ) {
-			return;
-		}
-
-		wp_enqueue_script( $this->plugin_name . '-notici-admin', plugin_dir_url( __DIR__ ) . 'admin/js/notici-admin.js', array( 'jquery', 'jquery-ui-datepicker' ) );
-	}
-
-
-
 	function save_notici() {
 
 		global $post;
@@ -165,38 +106,6 @@ class Notici_Register_Cpt {
 
 		if ( ! current_user_can( 'edit_post', $post->ID ) ) {
 			return $post->ID;
-		}
-
-		// Start date is mandatory
-		if ( ! isset( $_POST['notici_startdate'] ) ) :
-			return $post;
-		endif;
-
-		// Update start date.
-		$update_startdate = strtotime( sanitize_text_field( $_POST['notici_startdate'] ) );
-		update_post_meta( $post->ID, 'notici_startdate', date( 'Y-m-d', $update_startdate ) );
-
-		// Update end date if submitted.
-		if ( null != $_POST['notici_enddate'] ) {
-			$update_enddate = strtotime( sanitize_text_field( $_POST['notici_enddate'] ) );
-			update_post_meta( $post->ID, 'notici_enddate', date( 'Y-m-d', $update_enddate ) );
-		} else {
-			update_post_meta( $post->ID, 'notici_enddate', null );
-		}
-
-		// Update start and end time if matches regex pattern.
-		$update_starttime = sanitize_text_field( $_POST['notici_starttime'] );
-		if ( preg_match( '/^(?:2[0-3]|[01][0-9]):[0-5][0-9]$/', $update_starttime ) ) {
-			update_post_meta( $post->ID, 'notici_starttime', $update_starttime );
-		} else {
-			update_post_meta( $post->ID, 'notici_starttime', null );
-		}
-
-		$update_endtime = sanitize_text_field( $_POST['notici_endtime'] );
-		if ( preg_match( '/^(?:2[0-3]|[01][0-9]):[0-5][0-9]$/', $update_endtime ) ) {
-			update_post_meta( $post->ID, 'notici_endtime', $update_endtime );
-		} else {
-			update_post_meta( $post->ID, 'notici_endtime', null );
 		}
 
 	}
