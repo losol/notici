@@ -46,8 +46,8 @@ get_header();
 					printf( '<span class="sticky-post">%s</span>', _x( 'Featured', 'post', 'notici' ) );
 				}
 				echo '<b>' . get_the_title() . '</b>';
-				echo '&nbsp;&nbsp;&mdash;&nbsp;&nbsp;' . $post->post_content;
-				echo '&nbsp;&nbsp;&nbsp;' . '<a href="' . esc_url( get_permalink() ) . '" class="event-details-link">' . 'Link' . '</a>';
+				echo $post->post_content;
+				echo '<a href="' . esc_url( get_permalink() ) . '" class="event-details-link">' . 'Link' . '</a>';
 
 
 				?>
